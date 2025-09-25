@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1080">
+  <title>Product Slideshow + Video</title>
+  <style>
+    html, body { margin:0; padding:0; background:transparent; }
+    #container { width:1080px; height:1350px; overflow:hidden; position:relative; }
+
+    #slideshow img,
+    #slideshow video {
+      position:absolute; top:0; left:0;
+      width:1080px; height:1350px;
+      opacity:0;
+      transform: translateX(100%);
+      transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+    }
+    #slideshow .active { opacity:1; transform: translateX(0); }
+    #slideshow .exit   { opacity:0; transform: translateX(-100%); }
+
+    #loading { color:#fff; font-family:Arial, sans-serif; font-size:18px; padding:12px; }
+  </style>
+</head>
+<body>
+  <div id="container"><div id="slideshow"></div></div>
+  <div id="loading" style="display:none">Loading slideshow…</div>
+
+  <script>
+    // CONFIG
+    const totalItems = 21;         // number of PNGs
+    const pad = 2;                 // filename padding (01, 02…)
+    const prefix = "assets/images/";    // images folder
+    const displayTime = 4000;      // ms each image is shown
+    const transitionTime = 800;    // ms (must match CSS transition)
+    const videoFile = "assets/video/logoAnim.webm";   // video file
+
+    // Build the playlist
+    const playlist = [];
+    for (let i=1; i<=totalItems; i++) {
+      playlist.push({ type: "image", src: prefix + String(i).padStart(pad,'0') + ".png" });
+    }
+    playlist.push({ type: "video", src: videoFile }); // add video after last image
+
+    const slideshow = document.getElementById("slideshow");
+    const loading   = document.getElementById("loading");
+    const els = [];
+    let loaded = 0;
+
+    loading.style.display = "block";
+
+    // Preload items
+    playlist.forEach(item => {
+      if (item.type === "image") {
+        const img = new Image();
+        img.src = item.src;
+        img.onload = handleLoad;
+        img.onerror = handleLoad;
+        img.setAttribute("draggable","false");
+        slideshow.appendChild(img);
+        els.push(img);
+      } else if (item.type === "video") {
+        const vid = document.createElement("video");
+        vid.src = item.src;
+        vid.preload = "auto";
+        vid.setAttribute("playsinline","");
+        vid.setAttribute("muted",""); // OBS requires muted autoplay
+        // DO NOT loop — we want slideshow to restart after one play
+        vid.onloadeddata = handleLoad;
+        vid.onerror = handleLoad;
+        slideshow.appendChild(vid);
+        els.push(vid);
+      }
+    });
+
+    function handleLoad() {
+      loaded++;
+      if (loaded === playlist.length) startSlideshow();
+    }
+
+    function startSlideshow() {
+      loading.style.display = "none";
+      if (els.length === 0) {
+        loading.style.display = "block";
+        loading.textContent = "No media found.";
+        return;
+      }
+      showItem(0);
+    }
+
+    function showItem(index) {
+      const item = els[index];
+      if (!item) return;
+
+      // activate current
+      item.classList.add("active");
+
+      if (playlist[index].type === "image") {
+        // schedule next after delay
+        setTimeout(() => {
+          transitionOut(index, () => {
+            const nextIndex = index + 1;
+            if (nextIndex < playlist.length) {
+              showItem(nextIndex);
+            }
+          });
+        }, displayTime);
+
+      } else if (playlist[index].type === "video") {
+        item.currentTime = 0;
+        item.play();
+        item.onended = () => {
+          transitionOut(index, () => {
+            // restart whole sequence after video finishes
+            showItem(0);
+          });
+        };
+      }
+    }
+
+    function transitionOut(index, onDone) {
+      const el = els[index];
+      el.classList.remove("active");
+      el.classList.add("exit");
+
+      setTimeout(() => {
+        el.classList.remove("exit");
+        el.style.transform = "";
+        el.style.opacity = "";
+        if (playlist[index].type === "video") {
+          el.pause();
+        }
+        if (onDone) onDone();
+      }, transitionTime);
+    }
+  </script>
+</body>
+</html>
