@@ -1,0 +1,30 @@
+[
+	{ "type": "image", "src": "assets/images/idAA_01.webp" },
+	{ "type": "image", "src": "assets/images/idAA_02.webp" },
+	{ "type": "image", "src": "assets/images/idBB_01.webp" },
+	{ "type": "image", "src": "assets/images/idBB_03.webp" },
+	{ "type": "image", "src": "assets/images/idBB_04.webp" },
+	{ "type": "image", "src": "assets/images/idCC_01.webp" },
+	{ "type": "image", "src": "assets/images/idCC_02.webp" },
+	{ "type": "image", "src": "assets/images/idXX_01.webp" },
+	{ "type": "image", "src": "assets/images/idXX_02.webp" },
+	{ "type": "image", "src": "assets/images/idXX_03.webp" },
+	{ "type": "image", "src": "assets/images/idXX_04.webp" },
+	{ "type": "image", "src": "assets/images/idXX_05.webp" },
+	{ "type": "image", "src": "assets/images/idXX_06.webp" },
+	{ "type": "image", "src": "assets/images/jpBB_01.webp" },
+	{ "type": "image", "src": "assets/images/jpBB_02.webp" },
+	{ "type": "image", "src": "assets/images/jpBB_03.webp" },
+	{ "type": "image", "src": "assets/images/jpBB_04.webp" },
+	{ "type": "image", "src": "assets/images/jpCC_01.webp" },
+	{ "type": "image", "src": "assets/images/jpXX_01.webp" },
+	{ "type": "image", "src": "assets/images/enBB_01.webp" },
+	{ "type": "image", "src": "assets/images/enBB_02.webp" },
+	{ "type": "image", "src": "assets/images/enBB_03.webp" },
+	{ "type": "image", "src": "assets/images/exBB_01.webp" },
+	{ "type": "image", "src": "assets/images/exBB_02.webp" },
+	
+	
+	{ "type": "video", "src": "assets/video/logoAnim.webm" }	
+	
+]
